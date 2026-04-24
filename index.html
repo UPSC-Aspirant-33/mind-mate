@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stress Buster 🌿 — Your Personal Calm Space</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --teal:#00ffd5;
+  --purple:#a78bfa;
+  --blue:#60a5fa;
+  --pink:#f472b6;
+  --amber:#fbbf24;
+  --green:#4ade80;
+  --bg:#060d16;
+  --glass:rgba(255,255,255,0.06);
+  --glass-b:rgba(255,255,255,0.11);
+  --text:#f0f6f3;
+  --muted:rgba(240,246,243,0.5);
+  --font-display:'Playfair Display',Georgia,serif;
+  --font-body:'DM Sans',system-ui,sans-serif;
+  --trans:cubic-bezier(0.34,1.56,0.64,1);
+  --radius:24px;
+}
+html{scroll-behavior:smooth;}
+body{
+  min-height:100vh;
+  background:var(--bg);
+  font-family:var(--font-body);
+  color:var(--text);
+  overflow-x:hidden;
+}
+
+#bg-canvas{
+  position:fixed;top:0;left:0;
+  width:100%;height:100%;
+  z-index:0;pointer-events:none;
+}
+
+nav{
+  position:fixed;top:0;width:100%;z-index:500;
+  padding:12px 28px;
+  background:rgba(6,13,22,0.8);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(255,255,255,0.06);
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+.nav-brand{
+  font-family:var(--font-display);
+  font-size:1.15rem;font-weight:600;
+  background:linear-gradient(90deg,var(--teal),var(--purple));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  white-space:nowrap;letter-spacing:0.02em;
+}
+.nav-links{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;}
+.nav-links::-webkit-scrollbar{display:none;}
+.nav-links a{
+  color:rgba(255,255,255,0.6);
+  text-decoration:none;
+  padding:7px 14px;
+  border-radius:14px;
+  font-size:0.8rem;
+  white-space:nowrap;
+  transition:all 0.3s;
+  background:rgba(255,255,255,0.05);
+  border:1px solid transparent;
+}
+.nav-links a:hover{
+  background:rgba(0,255,213,0.08);
+  border-color:rgba(0,255,213,0.2);
+  color:var(--teal);
+}
+
+#main-site{position:relative;z-index:10;}
+
+.hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:120px 24px 80px;
+  text-align:center;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(0,255,213,0.08);
+  border:1px solid rgba(0,255,213,0.2);
+  padding:6px 18px;border-radius:20px;
+  font-size:0.75rem;letter-spacing:2.5px;
+  text-transform:uppercase;color:var(--teal);
+  margin-bottom:28px;
+}
+.hero-title{
+  font-size:clamp(2.4rem,7vw,4.5rem);
+  font-weight:800;line-height:1.12;
+  margin-bottom:24px;letter-spacing:-0.01em;
+}
+.hero-title .grad{
+  background:linear-gradient(120deg,var(--teal) 0%,var(--blue) 50%,var(--purple) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.hero-para{
+  max-width:580px;
+  font-size:1.05rem;line-height:1.85;
+  color:var(--muted);margin-bottom:36px;
+}
+.hero-para em{color:var(--teal);font-style:normal;font-weight:600;}
+.hero-para em.pink{color:var(--pink);}
+.hero-para em.purple{color:var(--purple);}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;}
+.btn-primary{
+  background:linear-gradient(135deg,var(--teal),var(--blue));
+  border:none;color:#060d16;
+  padding:15px 34px;border-radius:50px;
+  font-size:1rem;font-weight:800;
+  cursor:pointer;transition:all 0.3s;
+  text-decoration:none;display:inline-flex;align-items:center;gap:10px;
+  box-shadow:0 8px 30px rgba(0,255,213,0.25);
+}
+.btn-primary:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 16px 50px rgba(0,255,213,0.4);}
+.btn-secondary{
+  background:transparent;
+  border:1px solid rgba(255,255,255,0.2);
+  color:var(--text);padding:15px 34px;border-radius:50px;
+  font-size:1rem;cursor:pointer;transition:all 0.3s;
+  text-decoration:none;font-family:var(--font-body);
+}
+.btn-secondary:hover{border-color:var(--teal);color:var(--teal);transform:translateY(-3px);}
+
+.scroll-hint{
+  margin-top:60px;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  opacity:0.3;animation:bouncey 2.5s ease-in-out infinite;
+}
+.scroll-hint .arrow{font-size:1.2rem;}
+.scroll-hint span{font-size:0.7rem;letter-spacing:2.5px;text-transform:uppercase;}
+@keyframes bouncey{0%,100%{transform:translateY(0);}50%{transform:translateY(8px);}}
+
+.section{position:relative;z-index:10;padding:90px 24px;}
+.section-header{text-align:center;margin-bottom:52px;}
+.section-tag{
+  display:inline-block;
+  background:rgba(0,255,213,0.08);
+  border:1px solid rgba(0,255,213,0.2);
+  color:var(--teal);padding:5px 18px;border-radius:20px;
+  font-size:0.72rem;letter-spacing:2.5px;text-transform:uppercase;
+  margin-bottom:16px;
+}
+.section-title{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:700;margin-bottom:12px;}
+.section-sub{color:var(--muted);font-size:0.9rem;max-width:480px;margin:0 auto;line-height:1.7;}
+
+/* ─── FEATURED STUDY COMPANION BANNER ─── */
+#study-companion{
+  position:relative;z-index:10;
+  padding:0 24px 20px;
+}
+.study-banner{
+  max-width:1120px;
+  margin:0 auto;
+  position:relative;
+  overflow:hidden;
+  border-radius:28px;
+  border:1px solid rgba(96,165,250,0.35);
+  background:linear-gradient(135deg,rgba(8,18,38,0.95) 0%,rgba(10,22,48,0.92) 60%,rgba(15,30,58,0.9) 100%);
+  padding:40px 48px;
+  display:flex;align-items:center;gap:40px;
+  box-shadow:0 0 80px rgba(96,165,250,0.08), 0 20px 60px rgba(0,0,0,0.5);
+  cursor:pointer;
+  transition:transform 0.35s,box-shadow 0.35s,border-color 0.35s;
+  text-decoration:none;
+  color:var(--text);
+}
+.study-banner:hover{
+  transform:translateY(-4px);
+  border-color:rgba(96,165,250,0.6);
+  box-shadow:0 0 120px rgba(96,165,250,0.15), 0 30px 80px rgba(0,0,0,0.6);
+}
+
+/* Animated glow orb behind */
+.study-banner::before{
+  content:'';
+  position:absolute;
+  top:-60px;right:-60px;
+  width:300px;height:300px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(96,165,250,0.12) 0%,transparent 70%);
+  animation:studyGlow 4s ease-in-out infinite;
+  pointer-events:none;
+}
+.study-banner::after{
+  content:'';
+  position:absolute;
+  bottom:-80px;left:20%;
+  width:400px;height:200px;
+  border-radius:50%;
+  background:radial-gradient(ellipse,rgba(56,189,248,0.06) 0%,transparent 70%);
+  animation:studyGlow 4s ease-in-out infinite reverse;
+  pointer-events:none;
+}
+@keyframes studyGlow{0%,100%{opacity:0.6;transform:scale(1);}50%{opacity:1;transform:scale(1.1);}}
+
+/* Decorative grid lines */
+.study-banner-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(96,165,250,0.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(96,165,250,0.04) 1px,transparent 1px);
+  background-size:40px 40px;
+  pointer-events:none;
+  opacity:0.5;
+}
+
+.study-banner-left{
+  position:relative;z-index:2;
+  flex-shrink:0;
+}
+.study-big-icon{
+  width:90px;height:90px;
+  border-radius:22px;
+  background:linear-gradient(135deg,rgba(96,165,250,0.2),rgba(56,189,248,0.1));
+  border:1px solid rgba(96,165,250,0.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:2.8rem;
+  box-shadow:0 0 40px rgba(96,165,250,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
+  position:relative;
+}
+.study-big-icon::after{
+  content:'';
+  position:absolute;inset:-1px;
+  border-radius:23px;
+  background:linear-gradient(135deg,rgba(96,165,250,0.4),transparent 50%);
+  pointer-events:none;
+  opacity:0.4;
+}
+.study-badge-wrap{
+  position:absolute;
+  top:-10px;right:-12px;
+  background:linear-gradient(135deg,#60a5fa,#38bdf8);
+  border-radius:20px;
+  padding:3px 10px;
+  font-size:0.6rem;
+  font-weight:800;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  color:#060d16;
+  box-shadow:0 4px 14px rgba(96,165,250,0.4);
+  white-space:nowrap;
+}
+
+.study-banner-body{
+  position:relative;z-index:2;
+  flex:1;
+}
+.study-eyebrow{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:10px;
+}
+.study-module-num{
+  font-size:0.65rem;opacity:0.4;text-transform:uppercase;letter-spacing:2px;
+}
+.study-pill{
+  background:rgba(96,165,250,0.12);
+  border:1px solid rgba(96,165,250,0.25);
+  color:#60a5fa;
+  padding:3px 12px;border-radius:20px;
+  font-size:0.65rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;
+}
+.study-title{
+  font-size:clamp(1.3rem,2.5vw,1.8rem);
+  font-weight:800;
+  margin-bottom:10px;
+  line-height:1.2;
+  background:linear-gradient(90deg,#e0f0ff,#60a5fa);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.study-desc{
+  font-size:0.9rem;
+  color:rgba(240,246,243,0.65);
+  line-height:1.6;
+  max-width:480px;
+  margin-bottom:16px;
+}
+.study-features{
+  display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;
+}
+.study-feat{
+  display:flex;align-items:center;gap:6px;
+  background:rgba(96,165,250,0.08);
+  border:1px solid rgba(96,165,250,0.15);
+  padding:5px 12px;border-radius:20px;
+  font-size:0.73rem;color:rgba(240,246,243,0.7);
+}
+.study-feat-dot{
+  width:5px;height:5px;border-radius:50%;
+  background:#60a5fa;
+  flex-shrink:0;
+}
+.study-cta{
+  display:inline-flex;align-items:center;gap:10px;
+  background:linear-gradient(135deg,rgba(96,165,250,0.25),rgba(56,189,248,0.15));
+  border:1px solid rgba(96,165,250,0.4);
+  color:#7eb8f7;
+  padding:12px 24px;border-radius:50px;
+  font-size:0.88rem;font-weight:700;
+  transition:all 0.3s;
+}
+.study-banner:hover .study-cta{
+  background:linear-gradient(135deg,rgba(96,165,250,0.4),rgba(56,189,248,0.3));
+  border-color:rgba(96,165,250,0.7);
+  color:#fff;
+  gap:14px;
+}
+.study-cta-arrow{
+  transition:transform 0.3s;
+  font-size:1rem;
+}
+.study-banner:hover .study-cta-arrow{transform:translateX(4px);}
+
+/* Stats row */
+.study-stats{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;gap:18px;
+  padding-left:40px;
+  border-left:1px solid rgba(96,165,250,0.15);
+  flex-shrink:0;
+  align-items:center;
+}
+.study-stat{text-align:center;}
+.study-stat-val{
+  font-size:1.6rem;font-weight:800;
+  background:linear-gradient(135deg,#60a5fa,#38bdf8);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  line-height:1;
+  margin-bottom:4px;
+}
+.study-stat-label{font-size:0.67rem;opacity:0.45;text-transform:uppercase;letter-spacing:1.5px;}
+.study-stat-divider{width:1px;height:20px;background:rgba(96,165,250,0.1);}
+
+/* Divider between featured and grid */
+.section-divider{
+  max-width:1120px;margin:0 auto;
+  display:flex;align-items:center;gap:16px;
+  padding:0 0 40px;
+}
+.divider-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.08),transparent);}
+.divider-label{
+  font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;
+  color:rgba(240,246,243,0.3);white-space:nowrap;
+}
+
+/* ─── MODULE GRID ─── */
+.modules-grid{
+  max-width:1120px;margin:0 auto;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(310px,1fr));
+  gap:16px;
+}
+.module-card{
+  background:var(--glass);
+  backdrop-filter:blur(24px);
+  border:1px solid var(--glass-b);
+  border-radius:var(--radius);
+  padding:24px;
+  transition:all 0.35s;
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;gap:14px;
+  cursor:pointer;
+}
+.module-card::before{
+  content:'';position:absolute;
+  top:-70px;right:-70px;
+  width:180px;height:180px;border-radius:50%;
+  background:var(--card-glow,rgba(0,255,213,0.04));
+  filter:blur(50px);pointer-events:none;
+  transition:opacity 0.4s;
+}
+.module-card:hover{
+  transform:translateY(-6px);
+  border-color:var(--card-col,var(--teal));
+  box-shadow:0 20px 60px rgba(0,0,0,0.4);
+}
+.module-card:hover::before{opacity:2;}
+.card-top{display:flex;align-items:center;gap:16px;}
+.card-icon{
+  width:54px;height:54px;border-radius:16px;
+  background:var(--card-dim,rgba(0,255,213,0.1));
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.75rem;flex-shrink:0;
+}
+.card-meta .card-num{font-size:0.68rem;opacity:0.4;text-transform:uppercase;letter-spacing:1.5px;}
+.card-meta .card-name{font-size:1rem;font-weight:700;margin-top:2px;}
+.card-desc{font-size:0.83rem;color:var(--muted);line-height:1.6;}
+.card-tags{display:flex;gap:6px;flex-wrap:wrap;}
+.card-tag{
+  padding:3px 10px;border-radius:10px;
+  font-size:0.68rem;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.09);
+  color:rgba(255,255,255,0.6);
+}
+.card-btn{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--card-dim,rgba(0,255,213,0.08));
+  border:1px solid var(--card-col,rgba(0,255,213,0.3));
+  border-radius:14px;padding:11px 16px;
+  text-decoration:none;
+  color:var(--card-col,var(--teal));
+  font-size:0.83rem;font-weight:700;
+  transition:all 0.3s;margin-top:auto;
+}
+.card-btn:hover{background:var(--card-col,var(--teal));color:#060d16;}
+.card-btn-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--card-col,var(--teal));
+  animation:dotPulse 2s ease-in-out infinite;
+}
+@keyframes dotPulse{0%,100%{opacity:1;}50%{opacity:0.25;}}
+.card-btn-url{
+  flex:1;margin:0 10px;
+  font-size:0.72rem;font-weight:400;opacity:0.65;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+
+/* ─── HOW TO USE ─── */
+.how-grid{
+  max-width:960px;margin:0 auto;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px;
+}
+.how-card{
+  background:var(--glass);
+  border:1px solid var(--glass-b);
+  border-radius:20px;padding:28px 22px;
+  text-align:center;
+  transition:transform 0.3s,border-color 0.3s;
+}
+.how-card:hover{transform:translateY(-4px);border-color:rgba(0,255,213,0.25);}
+.how-num{
+  font-size:2.2rem;font-weight:800;
+  background:linear-gradient(90deg,var(--teal),var(--purple));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:10px;
+}
+.how-title{font-size:0.92rem;font-weight:700;margin-bottom:6px;}
+.how-desc{font-size:0.78rem;color:var(--muted);line-height:1.6;}
+
+/* ─── LOVE CARD ─── */
+.love-card{
+  max-width:740px;margin:0 auto;
+  background:var(--glass);
+  backdrop-filter:blur(30px);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:32px;padding:52px 44px;
+  text-align:center;position:relative;overflow:hidden;
+}
+.love-card::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(0,255,213,0.06),transparent 65%);
+  pointer-events:none;
+}
+.love-icon{font-size:3.8rem;margin-bottom:20px;display:block;}
+.love-title{
+  font-size:1.8rem;font-weight:700;
+  font-family:var(--font-display);
+  margin-bottom:20px;
+  background:linear-gradient(90deg,var(--teal),var(--purple));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.love-text{
+  font-size:0.97rem;line-height:2;
+  color:rgba(240,246,243,0.82);
+  margin-bottom:24px;
+}
+.love-sig{font-size:0.82rem;color:var(--muted);font-style:italic;}
+
+footer{
+  position:relative;z-index:10;
+  text-align:center;padding:28px;
+  font-size:0.75rem;color:var(--muted);
+  border-top:1px solid rgba(255,255,255,0.05);
+}
+
+/* ─── MINDMATE FAB ─── */
+#mm-fab-wrap{
+  position:fixed;bottom:30px;right:30px;
+  z-index:800;
+  display:flex;flex-direction:column;align-items:center;gap:0;
+}
+.mm-fab-label{
+  font-size:0.7rem;letter-spacing:0.08em;
+  text-transform:uppercase;color:rgba(94,255,216,0.7);
+  margin-bottom:8px;
+  animation:fabLabelPulse 3s ease-in-out infinite;
+  font-family:var(--font-body);
+}
+@keyframes fabLabelPulse{0%,100%{opacity:0.5;}50%{opacity:1;}}
+.mm-fab-ring{
+  position:absolute;
+  border-radius:50%;
+  border:1px solid rgba(94,255,216,0.25);
+  animation:fabRing 3s ease-in-out infinite;
+  pointer-events:none;
+}
+.mm-fab-ring:nth-child(1){width:72px;height:72px;}
+.mm-fab-ring:nth-child(2){width:90px;height:90px;animation-delay:0.5s;border-color:rgba(94,255,216,0.12);}
+.mm-fab-ring:nth-child(3){width:110px;height:110px;animation-delay:1s;border-color:rgba(94,255,216,0.06);}
+@keyframes fabRing{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.08);opacity:0.4;}}
+#mm-fab{
+  position:relative;z-index:2;
+  width:62px;height:62px;border-radius:50%;
+  border:1px solid rgba(94,255,216,0.3);
+  cursor:pointer;
+  background:radial-gradient(circle at 35% 35%,rgba(94,255,216,0.4),rgba(94,255,216,0.06) 65%,transparent);
+  backdrop-filter:blur(20px);
+  box-shadow:0 0 40px rgba(94,255,216,0.2),inset 0 1px 0 rgba(255,255,255,0.2),0 12px 40px rgba(0,0,0,0.45);
+  display:flex;align-items:center;justify-content:center;
+  transition:transform 0.4s var(--trans),box-shadow 0.4s ease;
+  animation:fabBreathe 5s ease-in-out infinite;
+  font-size:1.5rem;
+}
+#mm-fab:hover{
+  transform:scale(1.12);
+  box-shadow:0 0 70px rgba(94,255,216,0.35),inset 0 1px 0 rgba(255,255,255,0.3),0 20px 60px rgba(0,0,0,0.5);
+}
+@keyframes fabBreathe{0%,100%{transform:scale(1);}50%{transform:scale(1.04);}}
+
+/* ─── MINDMATE PANEL ─── */
+#mm-overlay{
+  position:fixed;inset:0;z-index:900;
+  background:rgba(6,13,22,0.5);
+  backdrop-filter:blur(6px);
+  opacity:0;pointer-events:none;
+  transition:opacity 0.4s ease;
+}
+#mm-overlay.open{opacity:1;pointer-events:all;}
+#mm-panel{
+  position:fixed;bottom:0;right:0;
+  width:100%;max-width:500px;
+  height:88vh;max-height:780px;
+  z-index:950;
+  background:rgba(8,14,26,0.96);
+  backdrop-filter:blur(30px);
+  border:1px solid rgba(255,255,255,0.09);
+  border-radius:28px 28px 0 0;
+  display:flex;flex-direction:column;
+  overflow:hidden;
+  box-shadow:0 -20px 80px rgba(0,0,0,0.6);
+  transform:translateY(100%);
+  transition:transform 0.5s var(--trans);
+}
+#mm-panel.open{transform:translateY(0);}
+.mm-header{
+  padding:18px 22px;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+  display:flex;align-items:center;gap:14px;flex-shrink:0;
+}
+.mm-avatar{
+  width:42px;height:42px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,rgba(94,255,216,0.45),rgba(94,255,216,0.04));
+  border:1px solid rgba(94,255,216,0.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.25rem;
+  box-shadow:0 0 16px rgba(94,255,216,0.15);
+}
+.mm-header-info h3{font-family:var(--font-display);font-size:1rem;font-weight:600;}
+.mm-status{font-size:0.72rem;color:#5effd8;display:flex;align-items:center;gap:5px;margin-top:1px;}
+.mm-dot{width:6px;height:6px;border-radius:50%;background:#5effd8;animation:mmDot 2s ease-in-out infinite;}
+@keyframes mmDot{0%,100%{opacity:1;}50%{opacity:0.2;}}
+.mm-close{
+  margin-left:auto;background:none;border:none;
+  color:rgba(240,246,243,0.5);font-size:1.1rem;cursor:pointer;
+  padding:7px;border-radius:50%;transition:color 0.2s,background 0.2s;
+}
+.mm-close:hover{color:var(--text);background:rgba(255,255,255,0.08);}
+.mm-messages{
+  flex:1;overflow-y:auto;padding:22px 18px;
+  display:flex;flex-direction:column;gap:14px;scroll-behavior:smooth;
+}
+.mm-messages::-webkit-scrollbar{width:3px;}
+.mm-messages::-webkit-scrollbar-track{background:transparent;}
+.mm-messages::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:3px;}
+.msg{max-width:84%;animation:msgIn 0.4s var(--trans) forwards;opacity:0;}
+@keyframes msgIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.msg.bot{align-self:flex-start;}
+.msg.user{align-self:flex-end;}
+.msg-bub{padding:13px 17px;border-radius:18px;font-size:0.92rem;line-height:1.65;}
+.msg.bot .msg-bub{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-bottom-left-radius:5px;}
+.msg.user .msg-bub{background:rgba(94,255,216,0.1);border:1px solid rgba(94,255,216,0.2);border-bottom-right-radius:5px;}
+.typing-ind{
+  display:flex;gap:5px;align-items:center;
+  padding:13px 17px;background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.1);border-radius:18px;border-bottom-left-radius:5px;
+  width:fit-content;animation:msgIn 0.4s var(--trans) forwards;opacity:0;
+}
+.td{width:7px;height:7px;background:rgba(240,246,243,0.5);border-radius:50%;animation:tdBounce 1.2s ease-in-out infinite;}
+.td:nth-child(2){animation-delay:0.2s;}
+.td:nth-child(3){animation-delay:0.4s;}
+@keyframes tdBounce{0%,60%,100%{transform:translateY(0);opacity:0.4;}30%{transform:translateY(-6px);opacity:1;}}
+.emotion-grid{display:flex;flex-direction:column;gap:9px;margin-top:6px;}
+.emotion-btn{
+  display:flex;align-items:center;gap:12px;padding:13px 16px;
+  background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);
+  border-radius:16px;cursor:pointer;transition:all 0.3s var(--trans);
+  text-align:left;color:var(--text);font-family:var(--font-body);font-size:0.9rem;width:100%;
+}
+.emotion-btn:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.2);transform:translateX(4px);}
+.em-emoji{font-size:1.3rem;}
+.em-label{font-weight:600;display:block;}
+.em-sub{font-size:0.74rem;opacity:0.5;display:block;margin-top:1px;font-weight:300;}
+.activity-grid{display:flex;flex-direction:column;gap:9px;margin-top:6px;}
+.activity-chip{
+  display:flex;align-items:center;gap:13px;padding:14px 16px;border-radius:16px;
+  border:1px solid rgba(255,255,255,0.09);background:rgba(255,255,255,0.05);
+  cursor:pointer;transition:all 0.3s var(--trans);color:var(--text);
+  font-family:var(--font-body);font-size:0.88rem;text-align:left;width:100%;
+}
+.activity-chip:hover{transform:translateX(4px) scale(1.01);border-color:rgba(255,255,255,0.22);box-shadow:0 6px 24px rgba(0,0,0,0.3);}
+.chip-icon{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0;}
+.chip-info strong{display:block;font-size:0.88rem;margin-bottom:2px;}
+.chip-info span{font-size:0.73rem;opacity:0.5;}
+.feedback-btns{display:flex;gap:9px;flex-wrap:wrap;margin-top:6px;}
+.fb-btn{
+  padding:9px 17px;border-radius:50px;border:1px solid rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.05);color:var(--text);cursor:pointer;
+  font-size:0.84rem;font-family:var(--font-body);transition:all 0.25s ease;
+}
+.fb-btn:hover{background:rgba(255,255,255,0.12);transform:translateY(-2px);}
+.back-link{
+  display:inline-flex;align-items:center;gap:5px;font-size:0.75rem;
+  color:rgba(240,246,243,0.45);cursor:pointer;margin-top:4px;padding:5px 0;
+  background:none;border:none;font-family:var(--font-body);transition:color 0.2s;
+}
+.back-link:hover{color:var(--text);}
+
+/* ─── FULLSCREEN ACTIVITY ─── */
+#mm-fullscreen{
+  position:fixed;inset:0;z-index:1000;background:#060d16;
+  display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.4s ease;
+}
+#mm-fullscreen.open{opacity:1;pointer-events:all;}
+.full-top{
+  position:absolute;top:0;left:0;right:0;padding:14px 18px;z-index:5;
+  background:linear-gradient(to bottom,rgba(6,13,22,0.95),transparent);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.full-name{font-family:var(--font-display);font-size:0.95rem;color:var(--muted);}
+.full-close-btn{
+  width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.06);backdrop-filter:blur(10px);color:var(--text);
+  cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s;
+}
+.full-close-btn:hover{background:rgba(255,255,255,0.15);}
+.full-loader{
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:18px;color:var(--muted);font-size:0.9rem;background:#060d16;z-index:3;
+}
+.loader-leaf{font-size:2.4rem;animation:leafSpin 2s ease-in-out infinite;}
+@keyframes leafSpin{0%,100%{transform:rotate(-10deg);}50%{transform:rotate(10deg) scale(1.1);}}
+.loader-track{width:150px;height:2px;background:rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;}
+.loader-fill{height:100%;background:linear-gradient(90deg,#5effd8,#7eb8f7);animation:lFill 1.6s ease forwards;}
+@keyframes lFill{from{width:0;}to{width:100%;}}
+#full-iframe{width:100%;flex:1;border:none;display:none;}
+
+/* ─── TOAST ─── */
+#toast{
+  position:fixed;bottom:110px;left:50%;transform:translateX(-50%) translateY(120px);
+  z-index:2000;background:rgba(8,14,26,0.97);backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,0.09);border-radius:18px;padding:14px 22px;
+  display:flex;align-items:center;gap:13px;min-width:250px;max-width:340px;
+  box-shadow:0 16px 50px rgba(0,0,0,0.5);transition:transform 0.5s var(--trans);pointer-events:none;
+}
+#toast.show{transform:translateX(-50%) translateY(0);}
+.toast-ico{font-size:1.35rem;}
+.toast-body{font-size:0.84rem;line-height:1.5;color:var(--muted);}
+.toast-body strong{color:var(--text);display:block;margin-bottom:2px;font-size:0.88rem;}
+
+body.mood-calm  #mm-fab{box-shadow:0 0 40px rgba(94,255,216,0.25),0 12px 40px rgba(0,0,0,0.45);}
+body.mood-stress #mm-fab{box-shadow:0 0 40px rgba(126,184,247,0.25),0 12px 40px rgba(0,0,0,0.45);}
+body.mood-low   #mm-fab{box-shadow:0 0 40px rgba(197,163,240,0.25),0 12px 40px rgba(0,0,0,0.45);}
+body.mood-angry  #mm-fab{box-shadow:0 0 40px rgba(255,179,71,0.25),0 12px 40px rgba(0,0,0,0.45);}
+body.mood-focus  #mm-fab{box-shadow:0 0 40px rgba(144,245,160,0.25),0 12px 40px rgba(0,0,0,0.45);}
+
+.reveal{opacity:0;transform:translateY(22px);transition:opacity 0.55s ease,transform 0.55s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+@media(max-width:768px){
+  .study-banner{flex-direction:column;padding:28px 24px;gap:24px;}
+  .study-stats{flex-direction:row;padding-left:0;padding-top:20px;border-left:none;border-top:1px solid rgba(96,165,250,0.15);width:100%;justify-content:center;}
+  .study-stat-divider{width:20px;height:1px;}
+}
+@media(max-width:600px){
+  .modules-grid{grid-template-columns:1fr;}
+  .hero-title{font-size:2.1rem;}
+  nav{padding:10px 14px;}
+  .love-card{padding:36px 22px;}
+  #mm-panel{max-width:100%;border-radius:24px 24px 0 0;}
+  #mm-fab-wrap{bottom:20px;right:20px;}
+  .study-stats{gap:12px;}
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<nav>
+  <span class="nav-brand">🌿 Stress Buster</span>
+  <div class="nav-wish">✨ Divya, you will achieve UPSC success — keep going</div>
+  <div class="nav-links">
+    <a href="#study-companion">📚 Study Flow</a>
+    <a href="#modules">Modules</a>
+    <a href="#how">How to Use</a>
+    <a href="#note">Note 💙</a>
+  </div>
+</nav>
+
+<div id="main-site">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">🌸 A gift made with care</div>
+    <h1 class="hero-title">
+      Your Personal<br>
+      <span class="grad">Stress Buster Space</span>
+    </h1>
+    <p class="hero-para">
+      This is built just for you — the one who studies hard, dreams big,<br>and sometimes forgets to breathe.<br><br>
+      Fourteen interactive worlds to <em>calm your mind</em>,
+      <em class="pink">release your stress</em>,<br>
+      and <em class="purple">remind you how strong you are</em>.
+    </p>
+    <div class="hero-cta">
+      <a href="#study-companion" class="btn-primary">📚 Start Study Flow</a>
+      <a href="#modules" class="btn-secondary">Explore All Modules ✨</a>
+    </div>
+    <div class="scroll-hint">
+      <div class="arrow">↓</div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- ═══ FEATURED STUDY COMPANION ═══ -->
+  <section id="study-companion" class="section" style="padding-bottom:32px;">
+    <div class="section-header reveal">
+      <div class="section-tag" style="background:rgba(96,165,250,0.1);border-color:rgba(96,165,250,0.25);color:#60a5fa;">📚 Your Study Companion</div>
+      <h2 class="section-title">Start Here When You Sit Down to Study</h2>
+      <p class="section-sub">This is your dedicated study tool — separate from the calm activities. Open it before every session.</p>
+    </div>
+
+    <div id="study-companion-wrap" style="max-width:1120px;margin:0 auto;">
+      <a class="study-banner reveal" href="https://upsc-aspirant-33.github.io/gentle-study-flow/" target="_blank" rel="noopener">
+        <div class="study-banner-grid"></div>
+
+        <div class="study-banner-left">
+          <div class="study-big-icon">
+            📚
+            <div class="study-badge-wrap">Study Tool</div>
+          </div>
+        </div>
+
+        <div class="study-banner-body">
+          <div class="study-eyebrow">
+            <span class="study-module-num">Module 05</span>
+            <span class="study-pill">⭐ Featured</span>
+          </div>
+          <div class="study-title">Gentle Study Flow</div>
+          <div class="study-desc">
+            A Pomodoro-style timer designed for UPSC aspirants — with mood-aware advice, session tracking, and a dashboard that shows your journey. Study smarter, not harder.
+          </div>
+          <div class="study-features">
+            <span class="study-feat"><span class="study-feat-dot"></span>Pomodoro Timer</span>
+            <span class="study-feat"><span class="study-feat-dot"></span>Mood-Aware Advice</span>
+            <span class="study-feat"><span class="study-feat-dot"></span>Session Dashboard</span>
+            <span class="study-feat"><span class="study-feat-dot"></span>Progress Tracking</span>
+          </div>
+          <div class="study-cta">
+            <span>Open Study Flow</span>
+            <span class="study-cta-arrow">→</span>
+          </div>
+          <div class="study-badge-wrap">First Enable Notification inside that app</div>
+        </div>
+
+        <div class="study-stats">
+          <div class="study-stat">
+            <div class="study-stat-val">25</div>
+            <div class="study-stat-label">min focus</div>
+          </div>
+          <div class="study-stat-divider"></div>
+          <div class="study-stat">
+            <div class="study-stat-val">5</div>
+            <div class="study-stat-label">min break</div>
+          </div>
+          <div class="study-stat-divider"></div>
+          <div class="study-stat">
+            <div class="study-stat-val">∞</div>
+            <div class="study-stat-label">sessions</div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- MODULES (13 calm activities — Module 5 excluded) -->
+  <section id="modules" class="section" style="padding-top:20px;">
+    <div class="section-header reveal">
+      <div class="section-tag">13 Calm Activity Modules</div>
+      <h2 class="section-title">Choose Your Moment 🌿</h2>
+      <p class="section-sub">Each module is a standalone calm space. Open any, stay as long as you need, then return.</p>
+    </div>
+    <div class="modules-grid" id="moduleGrid"></div>
+  </section>
+
+  <!-- HOW TO USE -->
+  <section id="how" class="section">
+    <div class="section-header">
+      <div class="section-tag">Getting Started</div>
+      <h2 class="section-title">How to Use This 💡</h2>
+      <p class="section-sub">Simple. No login. No data. No pressure.</p>
+    </div>
+    <div class="how-grid">
+      <div class="how-card reveal"><div class="how-num">01</div><div class="how-title">Open Study Flow first</div><div class="how-desc">Before studying, open the Study Flow timer. It sets the rhythm for your session.</div></div>
+      <div class="how-card reveal"><div class="how-num">02</div><div class="how-title">Notice how you feel</div><div class="how-desc">Stressed? Tired? Happy? There's a calm module for every mood.</div></div>
+      <div class="how-card reveal"><div class="how-num">03</div><div class="how-title">Stay as long as you need</div><div class="how-desc">There's no timer judging you here. This is your space.</div></div>
+      <div class="how-card reveal"><div class="how-num">04</div><div class="how-title">Come back anytime</div><div class="how-desc">Bookmark this page. Return whenever life feels heavy.</div></div>
+    </div>
+  </section>
+
+  <!-- NOTE -->
+  <section id="note" class="section">
+  <div class="love-card reveal">
+    <span class="love-icon">💌</span>
+    <div class="love-title">For You, From the heart</div>
+    <p class="love-text">
+      I made this because I know what it feels like — the weight of a dream that feels both close and impossibly far.<br><br>
+
+      The late nights. The days when nothing goes in. The moments you question everything.<br><br>
+
+      One day, you told me about the UPSC syllabus — how vast and overwhelming it felt.<br>
+      That stayed with me. And it made me want to build something… something that could help you, even in a small way.<br><br>
+
+      This little space isn't a distraction from your goal. <strong>It is part of reaching it.</strong><br><br>
+
+      Because a mind that breathes, laughs, cries, rests, and doodles — that is a mind that can crack UPSC.<br><br>
+
+      You are not just an IAS aspirant. You are a whole, beautiful human being.<br><br>
+
+      <strong>And you are going to make it. 🌟</strong>
+    </p>
+    <div class="love-sig">— Built for you, with every single line of code written in love 🌿</div>
+  </div>
+  </section>
+
+  <footer>
+    Made with 💙 &nbsp;•&nbsp; No data collected &nbsp;•&nbsp; No login needed &nbsp;•&nbsp; Just for you
+  </footer>
+</div>
+
+<!-- MINDMATE FAB -->
+<div id="mm-fab-wrap">
+  <span class="mm-fab-label">MindMate</span>
+  <div style="position:relative;display:flex;align-items:center;justify-content:center;">
+    <div class="mm-fab-ring"></div>
+    <div class="mm-fab-ring"></div>
+    <div class="mm-fab-ring"></div>
+    <button id="mm-fab" onclick="mmOpen()" aria-label="Open MindMate">🌿</button>
+  </div>
+</div>
+
+<div id="mm-overlay" onclick="mmClose()"></div>
+
+<div id="mm-panel">
+  <div class="mm-header">
+    <div class="mm-avatar">🌿</div>
+    <div class="mm-header-info">
+      <h3>MindMate</h3>
+      <div class="mm-status"><div class="mm-dot"></div>here for you</div>
+    </div>
+    <button class="mm-close" onclick="mmClose()">✕</button>
+  </div>
+  <div class="mm-messages" id="mm-messages"></div>
+</div>
+
+<div id="mm-fullscreen">
+  <div class="full-top">
+    <span class="full-name" id="full-name">MindMate 🌿</span>
+    <button class="full-close-btn" onclick="mmCloseActivity()">✕</button>
+  </div>
+  <div class="full-loader" id="full-loader">
+    <div class="loader-leaf">🌿</div>
+    <p>Preparing your space…</p>
+    <div class="loader-track"><div class="loader-fill"></div></div>
+  </div>
+  <iframe id="full-iframe" title="Activity"></iframe>
+</div>
+
+<div id="toast">
+  <div class="toast-ico" id="t-icon">🌿</div>
+  <div class="toast-body">
+    <strong id="t-title">MindMate</strong>
+    <span id="t-msg"></span>
+  </div>
+</div>
+
+<script>
+/* ── STARFIELD ── */
+(function(){
+  const c=document.getElementById('bg-canvas'),ctx=c.getContext('2d');
+  let W,H,t=0;
+  function resize(){W=c.width=innerWidth;H=c.height=innerHeight;}
+  resize();window.addEventListener('resize',resize);
+  const stars=[];
+  for(let i=0;i<280;i++)stars.push({x:Math.random(),y:Math.random(),r:Math.random()*1.3+0.2,a:Math.random()*0.5+0.1,spd:Math.random()*0.002+0.001});
+  const orbs=[
+    {x:0.15,y:0.25,r:500,col:'rgba(0,255,213,0.032)',spd:0.003},
+    {x:0.82,y:0.6, r:420,col:'rgba(167,139,250,0.028)',spd:0.004},
+    {x:0.5, y:0.88,r:550,col:'rgba(96,165,250,0.022)',spd:0.002},
+    {x:0.05,y:0.75,r:350,col:'rgba(244,114,182,0.022)',spd:0.005},
+  ];
+  (function frame(){
+    t+=0.5;ctx.clearRect(0,0,W,H);
+    stars.forEach(s=>{s.a+=Math.sin(t*s.spd*0.4)*0.006;s.a=Math.max(0.05,Math.min(0.75,s.a));ctx.beginPath();ctx.arc(s.x*W,s.y*H,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(255,255,255,${s.a})`;ctx.fill();});
+    orbs.forEach((o,i)=>{const x=(o.x+Math.sin(t*o.spd+i)*0.13)*W;const y=(o.y+Math.cos(t*o.spd*1.3+i)*0.1)*H;const g=ctx.createRadialGradient(x,y,0,x,y,o.r);g.addColorStop(0,o.col);g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);});
+    requestAnimationFrame(frame);
+  })();
+})();
+
+/* ── MODULES (Module 5 excluded from the activity grid) ── */
+const MODULES=[
+  {n:1, icon:'🌿',name:'Daily Gentle Quote',     desc:'A new calming quote every day with ambient soundscape — rain, forest, ocean or 528Hz healing tone.',tags:['Quotes','Ambient Sound','Daily'],  col:'#00ffd5',dim:'rgba(0,255,213,0.1)',glow:'rgba(0,255,213,0.05)',    url:'https://upsc-aspirant-33.github.io/one-gentle-moment/'},
+  {n:2, icon:'💭',name:'Mood Experience',         desc:'Tell how you feel. Get a personalised message, Tamil song recommendations, and a gentle visualisation.',tags:['Mood','Music','Tamil'],    col:'#a78bfa',dim:'rgba(167,139,250,0.1)',glow:'rgba(167,139,250,0.05)',  url:'https://effulgent-basbousa-c25d2e.netlify.app/'},
+  {n:3, icon:'🎨',name:'Doodle Relax',            desc:'Draw freely on a glowing canvas. Pen, glow brush, spray, eraser — no rules, just release.',tags:['Drawing','Creative','Touch'],          col:'#fbbf24',dim:'rgba(251,191,36,0.1)',glow:'rgba(251,191,36,0.05)',    url:'https://upsc-aspirant-33.github.io/draw-your-calm/'},
+  {n:4, icon:'📝',name:'ClearMind Journal',       desc:'Write anything — no judgement, no correction. Tag your emotion. Watch your thoughts become lighter.',tags:['Journaling','Emotions'],      col:'#34d399',dim:'rgba(52,211,153,0.1)',glow:'rgba(52,211,153,0.05)',    url:'https://upsc-aspirant-33.github.io/clearmind-journal/'},
+  /* Module 5 (Gentle Study Flow) is now the featured Study Companion above */
+  {n:5, icon:'🌍',name:'Mind World Trip',               desc:'Click any city on a dark world map for a guided mental vacation with ambient animation.',tags:['World Map','Meditation','Travel'],         col:'#818cf8',dim:'rgba(129,140,248,0.1)',glow:'rgba(129,140,248,0.05)',    url:'https://spectacular-profiterole-7a3b4b.netlify.app/'},
+  {n:6, icon:'🌍',name:'Mind Trip',               desc:'Click any city on a dark world map for a guided mental vacation with ambient animation.',tags:['World Map','Meditation','Travel'],         col:'#f97316',dim:'rgba(249,115,22,0.1)',glow:'rgba(249,115,22,0.05)',    url:'https://upsc-aspirant-33.github.io/mind-trip/'},
+  {n:7, icon:'✉️',name:'Letter to Future Me',    desc:'Write a heartfelt email to your future IAS-officer self. It lives locally — private and permanent.',tags:['Letters','Motivation'],       col:'#f472b6',dim:'rgba(244,114,182,0.1)',glow:'rgba(244,114,182,0.05)',  url:'https://upsc-aspirant-33.github.io/letter-to-future-me/'},
+  {n:8, icon:'🌸',name:'Calm Breathing',          desc:'Animated breathing circle with 4 science-backed patterns. Cycle counter, session stats.',tags:['Breathing','Mindfulness'],                col:'#00ffd5',dim:'rgba(0,255,213,0.08)',glow:'rgba(0,255,213,0.04)',    url:'https://upsc-aspirant-33.github.io/breath-with-me/'},
+  {n:9, icon:'🎧',name:'Voice Dump',              desc:'Record yourself speaking freely. No playback for others — just release into the void.',tags:['Voice','Recording','Release'],               col:'#c084fc',dim:'rgba(192,132,252,0.1)',glow:'rgba(192,132,252,0.05)',  url:'https://upsc-aspirant-33.github.io/voice/'},
+  {n:10,icon:'🎵',name:'Mind Reset Music',        desc:'Curated playlist — lofi, 528Hz healing, nature sounds, sleep frequencies.',tags:['Music','528Hz','Calm'],                                 col:'#818cf8',dim:'rgba(129,140,248,0.1)',glow:'rgba(129,140,248,0.05)',  url:'https://upsc-aspirant-33.github.io/calmwave-player/'},
+  {n:11,icon:'🌸',name:'Relaxation Games',        desc:'Catch the smile, Memory match, Bubble burst, Lucky support message — gentle dopamine.',tags:['Games','Fun','Points'],                     col:'#fb7185',dim:'rgba(251,113,133,0.1)',glow:'rgba(251,113,133,0.05)',  url:'https://upsc-aspirant-33.github.io/Calm-Games/'},
+  {n:12,icon:'😂',name:'Motivation Hub',          desc:'Fun YouTube channels + rotating daily affirmations. Laugh a little. Smile a lot.',tags:['Channels','Affirmations','Break'],              col:'#fcd34d',dim:'rgba(252,211,77,0.1)',glow:'rgba(252,211,77,0.05)',    url:'https://upsc-aspirant-33.github.io/Soul-Refresh/'},
+  {n:13,icon:'🤸',name:'Body Break Activities',   desc:'5-min stretch, 10-min phone-free walk, cold water splash, 20-20-20 eye rest — with timers.',tags:['Activity','Timer','Physical'],       col:'#4ade80',dim:'rgba(74,222,128,0.1)',glow:'rgba(74,222,128,0.05)',    url:'https://upsc-aspirant-33.github.io/Body-Reset/'},
+  {n:14,icon:'🧘',name:'Decide & Focus',          desc:'Read calmly, choose one topic, commit, and run a 15-minute focus session. Clear mind. Begin.',tags:['Focus','Timer','Decision'],         col:'#38bdf8',dim:'rgba(56,189,248,0.1)',glow:'rgba(56,189,248,0.05)',    url:'https://upsc-aspirant-33.github.io/Focus-Sprint/'},
+];
+
+(function(){
+  const grid=document.getElementById('moduleGrid');
+  MODULES.forEach(m=>{
+    const d=document.createElement('div');
+    d.className='module-card reveal';
+    d.style.setProperty('--card-col',m.col);
+    d.style.setProperty('--card-dim',m.dim);
+    d.style.setProperty('--card-glow',m.glow);
+    d.innerHTML=`
+      <div class="card-top">
+        <div class="card-icon">${m.icon}</div>
+        <div class="card-meta">
+          <div class="card-num">Module ${String(m.n).padStart(2,'0')}</div>
+          <div class="card-name">${m.name}</div>
+        </div>
+      </div>
+      <div class="card-desc">${m.desc}</div>
+      <div class="card-tags">${m.tags.map(t=>`<span class="card-tag">${t}</span>`).join('')}</div>
+      <a class="card-btn" href="${m.url}" target="_blank" rel="noopener">
+        <div class="card-btn-dot"></div>
+        <span class="card-btn-url">${m.url}</span>
+        <span>Open →</span>
+      </a>`;
+    grid.appendChild(d);
+  });
+})();
+
+/* scroll reveal */
+const ro=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
+},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+/* ── MINDMATE DATA ── */
+const ACTIVITIES={
+  breathing:{icon:'🌬️',label:'Breathing Exercise',    desc:'4-7-8 rhythm. Let your body exhale the stress.',color:'#7eb8f7',url:'https://upsc-aspirant-33.github.io/breathing/'},
+  journal:  {icon:'📝',label:'Journal Your Thoughts', desc:'Write it out. No rules, just honesty.',          color:'#c5a3f0',url:'https://upsc-aspirant-33.github.io/mindset/'},
+  music:    {icon:'🎧',label:'Calm Music',             desc:'528 Hz frequencies to reset your mind.',         color:'#5effd8',url:'https://upsc-aspirant-33.github.io/music/'},
+  motivation:{icon:'💬',label:'Supportive Quotes',    desc:"A quiet word that says: you're enough.",          color:'#ffb347',url:'https://upsc-aspirant-33.github.io/quotes/'},
+  doodle:   {icon:'🎨',label:'Doodle & Draw',          desc:'Let your hand move without thinking.',            color:'#f5a0c0',url:'https://upsc-aspirant-33.github.io/draw-your-calm/'},
+  worldtrip:{icon:'🌍',label:'Mental World Trip',      desc:'Close your eyes and travel somewhere peaceful.',  color:'#90f5a0',url:'https://spectacular-profiterole-7a3b4b.netlify.app/'},
+  future:   {icon:'📮',label:'Letter to Future Me',   desc:'Write to the version of you who made it.',        color:'#c5a3f0',url:'https://upsc-aspirant-33.github.io/future/'},
+  timer:    {icon:'⏰',label:'Gentle Study Timer',    desc:'Soft Pomodoro. No pressure, just rhythm.',        color:'#7eb8f7',url:'https://upsc-aspirant-33.github.io/timer/'},
+  voice:    {icon:'🎙️',label:'Voice Dump',            desc:'Say it out loud. Let the words go free.',         color:'#ffb347',url:'https://upsc-aspirant-33.github.io/voice/'},
+  exercise: {icon:'🙆‍♀️',label:'Gentle Movement',    desc:'Stretch, breathe, reset your body slowly.',       color:'#90f5a0',url:'https://upsc-aspirant-33.github.io/exercise/'},
+  videos:   {icon:'📽️',label:'Funny Videos',          desc:'A little laughter is medicine.',                  color:'#ffb347',url:'https://upsc-aspirant-33.github.io/videos/'},
+  mood:     {icon:'😊',label:'Mood Capture',           desc:'Notice how you feel. That alone is healing.',    color:'#5effd8',url:'https://stalwart-biscotti-95d4ce.netlify.app/'},
+  books:    {icon:'📚',label:'Mindful Reading',        desc:'15 quiet minutes with something meaningful.',     color:'#c5a3f0',url:'https://upsc-aspirant-33.github.io/book/'},
+  games:    {icon:'🎮',label:'Mini Games',             desc:'Memory, bubbles, escape — gentle play.',          color:'#90f5a0',url:'https://upsc-aspirant-33.github.io/game/'},
+};
+const EMOTIONS={
+  stressed:{label:'I feel stressed',  emoji:'😔',sub:'overwhelmed, anxious, too much',mood:'stress',acts:['breathing','music','voice','exercise'],    reply:"I hear you. That weight on your chest is real. Let's find something gentle that can help ease it a little…"},
+  low:     {label:'I feel low',       emoji:'😞',sub:'sad, unmotivated, hollow',     mood:'low',  acts:['motivation','future','doodle','videos'],     reply:"It's okay not to be okay. You don't have to perform happiness right now. Let's sit with something soft…"},
+  angry:   {label:"I'm frustrated",   emoji:'😡',sub:"irritated, stuck, things won't work",mood:'angry',acts:['voice','doodle','breathing','worldtrip'],reply:"That frustration is valid. Sometimes we need to release before we can reset. Here's a place to let it out…"},
+  focus:   {label:"I can't focus",    emoji:'😴',sub:'scattered, foggy, distracted', mood:'focus',acts:['timer','breathing','books','music','games'],          reply:"Your brain is probably tired, not broken. Let's create a gentle container for focus — no pressure…"},
+  calm:    {label:'I just need calm', emoji:'🤍',sub:'peace, stillness, a quiet moment',mood:'calm',acts:['worldtrip','music','exercise','mood','games'],      reply:"This is one of the wisest things you can choose — to simply rest. Let's find your still point…"},
+};
+
+let mmState={emotion:null,activity:null,mealSent:new Set(),notif:false,open:false};
+const mmMsgs=document.getElementById('mm-messages');
+function scrollMM(){setTimeout(()=>mmMsgs.scrollTo({top:mmMsgs.scrollHeight,behavior:'smooth'}),50);}
+function addMsg(type,html,delay=0){return new Promise(r=>{setTimeout(()=>{const d=document.createElement('div');d.className=`msg ${type}`;d.innerHTML=`<div class="msg-bub">${html}</div>`;mmMsgs.appendChild(d);scrollMM();r();},delay);});}
+function typing(ms=1200){const d=document.createElement('div');d.className='typing-ind';d.innerHTML='<div class="td"></div><div class="td"></div><div class="td"></div>';mmMsgs.appendChild(d);scrollMM();return new Promise(r=>setTimeout(()=>{d.remove();r();},ms));}
+function addWidget(html,delay=0){return new Promise(r=>{setTimeout(()=>{const d=document.createElement('div');d.className='msg bot';d.innerHTML=`<div class="msg-bub" style="background:transparent;border:none;padding:4px 0;">${html}</div>`;mmMsgs.appendChild(d);scrollMM();r();},delay);});}
+function speak(text,rate=0.65,pitch=1.1){if(!window.speechSynthesis)return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.rate=rate;u.pitch=pitch;u.volume=1;const vs=window.speechSynthesis.getVoices();const v=vs.find(v=>/samantha|zira|karen|moira|tessa/i.test(v.name))||vs.find(v=>v.lang.startsWith('en'))||vs[0];if(v)u.voice=v;window.speechSynthesis.speak(u);}
+function mmOpen(){if(mmState.open)return;mmState.open=true;document.getElementById('mm-overlay').classList.add('open');document.getElementById('mm-panel').classList.add('open');if(mmMsgs.children.length===0)startConvo();}
+function mmClose(){mmState.open=false;document.getElementById('mm-overlay').classList.remove('open');document.getElementById('mm-panel').classList.remove('open');}
+async function startConvo(){mmMsgs.innerHTML='';mmState.emotion=null;await typing(1400);await addMsg('bot',"Hey… I'm here 🌿");await typing(1000);await addMsg('bot','How can I support you right now?');await typing(1200);await addWidget(buildEmotions(),100);setTimeout(()=>speak("Hey… I'm here. Tell me how you're feeling."),600);}
+function buildEmotions(){let h=`<div class="emotion-grid">`;Object.entries(EMOTIONS).forEach(([k,e])=>{h+=`<button class="emotion-btn" onclick="pickEmotion('${k}')"><span class="em-emoji">${e.emoji}</span><span><span class="em-label">${e.label}</span><span class="em-sub">${e.sub}</span></span></button>`;});return h+`</div>`;}
+async function pickEmotion(key){const e=EMOTIONS[key];if(!e)return;mmState.emotion=key;document.body.className=`mood-${e.mood}`;await addMsg('user',`${e.emoji} ${e.label}`);await typing(1600);await addMsg('bot',e.reply);await typing(1100);await addWidget(buildActs(e.acts),100);speak(e.reply,0.65,1.1);}
+function buildActs(keys){let h=`<div class="activity-grid">`;keys.forEach(k=>{const a=ACTIVITIES[k];if(!a)return;h+=`<button class="activity-chip" onclick="openAct('${k}')"><div class="chip-icon" style="background:${a.color}22;">${a.icon}</div><div class="chip-info"><strong>${a.label}</strong><span>${a.desc}</span></div></button>`;});h+=`<button class="back-link" onclick="goBack()">← choose a different feeling</button>`;return h+`</div>`;}
+async function goBack(){mmState.emotion=null;document.body.className='';await typing(800);await addMsg('bot','Of course — take your time choosing 🌿');await addWidget(buildEmotions(),300);}
+function openAct(key){const a=ACTIVITIES[key];if(!a)return;mmState.activity=key;document.getElementById('full-name').textContent=`${a.icon} ${a.label}`;const iframe=document.getElementById('full-iframe');iframe.src='';iframe.style.display='none';const loader=document.getElementById('full-loader');loader.style.display='flex';const fill=loader.querySelector('.loader-fill');fill.style.animation='none';requestAnimationFrame(()=>{fill.style.animation='';});document.getElementById('mm-fullscreen').classList.add('open');iframe.onload=()=>setTimeout(()=>{loader.style.display='none';iframe.style.display='block';},400);iframe.src=a.url;speak(`Opening ${a.label}. Take your time here.`);}
+async function mmCloseActivity(){document.getElementById('mm-fullscreen').classList.remove('open');document.getElementById('full-iframe').src='';if(!mmState.open)mmOpen();await typing(900);await addMsg('bot','How did that feel for you?');await addWidget(`<div class="feedback-btns"><button class="fb-btn" onclick="feedback('yes')">💚 That helped</button><button class="fb-btn" onclick="feedback('little')">🌀 A little</button><button class="fb-btn" onclick="feedback('no')">💭 Not really</button></div>`,200);}
+async function feedback(r){const map={yes:{u:'💚 That helped',b:"I'm so glad 🌿 That small step matters more than you know.",n:'Would you like to try something else, or just rest here for a while?'},little:{u:'🌀 A little',b:'A little is still something. Even 1% lighter is real.',n:'Want to try one more thing that might help?'},no:{u:'💭 Not really',b:"That's okay. Not everything works every time — you're still trying, and that matters.",n:'Can I suggest something different for how you\'re feeling?'}};const d=map[r];await addMsg('user',d.u);await typing(1300);await addMsg('bot',d.b);await typing(1100);await addMsg('bot',d.n);if(mmState.emotion){const em=EMOTIONS[mmState.emotion];const rest=em.acts.filter(k=>k!==mmState.activity);await typing(900);await addWidget(rest.length>0?buildActs(rest.slice(0,3)):buildEmotions(),200);}speak(d.b,0.65,1.1);}
+function showToast(icon,title,msg){document.getElementById('t-icon').textContent=icon;document.getElementById('t-title').textContent=title;document.getElementById('t-msg').textContent=msg;const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),6000);}
+function remind(icon,title,msg){if(document.visibilityState==='visible'){showToast(icon,title,msg);speak(msg,0.78,1.0);}else if(mmState.notif&&'Notification' in window)new Notification(`MindMate 🌿 — ${title}`,{body:msg});}
+function startReminders(){const WATER_MS=10*60*1000;const MEALS=[{h:8,m:0,icon:'🌅',title:'Breakfast time',msg:'Start your morning gently. A good meal helps your mind stay clear.'},{h:13,m:0,icon:'☀️',title:'Lunch reminder',msg:'Step away from your notes for a little while. Eat, rest, return.'},{h:17,m:0,icon:'🍵',title:'Snack break',msg:'A small snack and a stretch. Your brain needs fuel too.'},{h:20,m:0,icon:'🌙',title:'Dinner time',msg:"Nourish yourself before the evening. You've worked hard today."}];setInterval(()=>remind('💧','Stay hydrated','Hey… just a small reminder to drink some water 💧'),WATER_MS);setInterval(()=>{const now=new Date(),key=`${now.getHours()}-${now.getMinutes()}`;MEALS.forEach(m=>{if(now.getHours()===m.h&&now.getMinutes()===m.m&&!mmState.mealSent.has(key)){mmState.mealSent.add(key);remind(m.icon,m.title,m.msg);}});},60000);}
+function requestNotif(){if(!('Notification' in window))return;if(Notification.permission==='granted'){mmState.notif=true;return;}if(Notification.permission!=='denied')Notification.requestPermission().then(p=>{mmState.notif=p==='granted';});}
+(function init(){requestNotif();startReminders();const greet=()=>speak("Hey… I'm here for you. Click MindMate in the corner whenever you need support.",0.65,1.1);if(window.speechSynthesis.getVoices().length>0)setTimeout(greet,1200);else window.speechSynthesis.onvoiceschanged=()=>setTimeout(greet,1200);})();
+</script>
+</body>
+</html>

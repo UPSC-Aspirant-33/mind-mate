@@ -697,6 +697,112 @@ body.mood-focus  #mm-fab{box-shadow:0 0 40px rgba(144,245,160,0.25),0 12px 40px 
   #mm-fab-wrap{bottom:20px;right:20px;}
   .study-stats{gap:12px;}
 }
+
+/* 🎂 BIRTHDAY MODE */
+body.birthday-mode {
+  --teal:#ff8bdc;
+  --purple:#ff6ec7;
+  --blue:#ffd166;
+  --pink:#ff4d6d;
+  --amber:#ffb347;
+  --green:#6effa3;
+  --bg:#1a0f1f;
+}
+
+/* soft glow background */
+body.birthday-mode::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(255,105,180,0.15), transparent 60%),
+    radial-gradient(circle at 80% 70%, rgba(255,215,0,0.12), transparent 60%);
+  z-index:0;
+  pointer-events:none;
+}
+
+/* Hero gradient change */
+body.birthday-mode .hero-title .grad{
+  background:linear-gradient(120deg,#ff6ec7,#ffd166,#ff8bdc);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+/* Nav wish highlight */
+body.birthday-mode .nav-wish{
+  color:#ffd166;
+  font-weight:600;
+}
+
+/* 🎊 CONFETTI */
+@keyframes confettiFall {
+  0% { transform: translateY(-10vh) rotate(0deg); opacity:1; }
+  100% { transform: translateY(110vh) rotate(360deg); opacity:0; }
+}
+
+.confetti{
+  position:fixed;
+  top:0;
+  width:8px;
+  height:8px;
+  background:#fff;
+  animation:confettiFall linear infinite;
+  z-index:1;
+  pointer-events:none;
+}
+
+/* 🎂 Birthday popup card */
+#birthday-popup{
+  position:fixed;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,0.6);
+  z-index:3000;
+  backdrop-filter:blur(8px);
+}
+
+.bday-card{
+  background:linear-gradient(135deg,#1a0f1f,#2a1333);
+  border:1px solid rgba(255,255,255,0.1);
+  padding:40px;
+  border-radius:28px;
+  text-align:center;
+  max-width:400px;
+  animation:popIn 0.6s var(--trans);
+}
+
+@keyframes popIn{
+  from{transform:scale(0.8);opacity:0;}
+  to{transform:scale(1);opacity:1;}
+}
+
+.bday-title{
+  font-size:1.8rem;
+  font-weight:800;
+  background:linear-gradient(90deg,#ff6ec7,#ffd166);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  margin-bottom:12px;
+}
+
+.bday-text{
+  font-size:0.95rem;
+  color:rgba(255,255,255,0.7);
+  line-height:1.7;
+  margin-bottom:20px;
+}
+
+.bday-btn{
+  background:linear-gradient(135deg,#ff6ec7,#ffd166);
+  border:none;
+  padding:12px 26px;
+  border-radius:50px;
+  font-weight:700;
+  cursor:pointer;
+}
+
 </style>
 </head>
 <body>
@@ -1023,6 +1129,81 @@ function remind(icon,title,msg){if(document.visibilityState==='visible'){showToa
 function startReminders(){const WATER_MS=10*60*1000;const MEALS=[{h:8,m:0,icon:'🌅',title:'Breakfast time',msg:'Start your morning gently. A good meal helps your mind stay clear.'},{h:13,m:0,icon:'☀️',title:'Lunch reminder',msg:'Step away from your notes for a little while. Eat, rest, return.'},{h:17,m:0,icon:'🍵',title:'Snack break',msg:'A small snack and a stretch. Your brain needs fuel too.'},{h:20,m:0,icon:'🌙',title:'Dinner time',msg:"Nourish yourself before the evening. You've worked hard today."}];setInterval(()=>remind('💧','Stay hydrated','Hey Divya… just a small reminder to drink some water 💧'),WATER_MS);setInterval(()=>{const now=new Date(),key=`${now.getHours()}-${now.getMinutes()}`;MEALS.forEach(m=>{if(now.getHours()===m.h&&now.getMinutes()===m.m&&!mmState.mealSent.has(key)){mmState.mealSent.add(key);remind(m.icon,m.title,m.msg);}});},60000);}
 function requestNotif(){if(!('Notification' in window))return;if(Notification.permission==='granted'){mmState.notif=true;return;}if(Notification.permission!=='denied')Notification.requestPermission().then(p=>{mmState.notif=p==='granted';});}
 (function init(){requestNotif();startReminders();const greet=()=>speak("Hey Divya… I'm here for you. Click MindMate in the corner whenever you need support.",0.65,1.1);if(window.speechSynthesis.getVoices().length>0)setTimeout(greet,1200);else window.speechSynthesis.onvoiceschanged=()=>setTimeout(greet,1200);})();
+
+/* 🎂 BIRTHDAY MODE ENGINE */
+(function checkBirthdayMode(){
+  const today = new Date();
+  const day = today.getDate();
+  const month = today.getMonth(); // May = 4
+
+  if(day === 1 && month === 4){
+
+    document.body.classList.add("birthday-mode");
+
+    /* 🎊 Confetti generator */
+    function createConfetti(){
+      for(let i=0;i<100;i++){
+        const c = document.createElement("div");
+        c.className = "confetti";
+
+        c.style.left = Math.random()*100 + "vw";
+        c.style.background = `hsl(${Math.random()*360}, 100%, 70%)`;
+        c.style.animationDuration = (Math.random()*3 + 2) + "s";
+        c.style.opacity = Math.random();
+
+        document.body.appendChild(c);
+
+        setTimeout(()=>c.remove(), 5000);
+      }
+    }
+
+    createConfetti();
+
+    /* 🎂 Change texts */
+    const wish = document.querySelector(".nav-wish");
+    if(wish){
+      wish.innerText = "🎂 Happy Birthday Divya — Today is yours ✨";
+    }
+
+    const badge = document.querySelector(".hero-badge");
+    if(badge){
+      badge.innerText = "🎉 A special day just for you";
+    }
+
+    /* 🎁 Birthday popup */
+    setTimeout(()=>{
+      const popup = document.createElement("div");
+      popup.id = "birthday-popup";
+
+      popup.innerHTML = `
+        <div class="bday-card">
+          <div class="bday-title">🎂 Happy Birthday 🎉</div>
+          <div class="bday-text">
+            Today is not for stress.<br>
+            Not for pressure.<br><br>
+            It's for smiles, peace, and everything soft.<br><br>
+            You deserve this day. 💙
+          </div>
+          <button class="bday-btn" onclick="this.parentElement.parentElement.remove()">
+            Enter Your Space 🌿
+          </button>
+        </div>
+      `;
+
+      document.body.appendChild(popup);
+
+      showToast("🎂","Happy Birthday 🎉","Relax, smile, and enjoy your day 💙");
+
+    },1500);
+
+    /* Optional auto-open MindMate */
+    setTimeout(()=>{
+      if(typeof mmOpen === "function") mmOpen();
+    },3000);
+
+  }
+})();
+
 </script>
 </body>
 </html>

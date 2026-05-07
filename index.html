@@ -1207,17 +1207,76 @@ function scrollMM(){setTimeout(()=>mmMsgs.scrollTo({top:mmMsgs.scrollHeight,beha
 function addMsg(type,html,delay=0){return new Promise(r=>{setTimeout(()=>{const d=document.createElement('div');d.className=`msg ${type}`;d.innerHTML=`<div class="msg-bub">${html}</div>`;mmMsgs.appendChild(d);scrollMM();r();},delay);});}
 function typing(ms=1200){const d=document.createElement('div');d.className='typing-ind';d.innerHTML='<div class="td"></div><div class="td"></div><div class="td"></div>';mmMsgs.appendChild(d);scrollMM();return new Promise(r=>setTimeout(()=>{d.remove();r();},ms));}
 function addWidget(html,delay=0){return new Promise(r=>{setTimeout(()=>{const d=document.createElement('div');d.className='msg bot';d.innerHTML=`<div class="msg-bub" style="background:transparent;border:none;padding:4px 0;">${html}</div>`;mmMsgs.appendChild(d);scrollMM();r();},delay);});}
-function speak(text,rate=0.65,pitch=1.1){if(!window.speechSynthesis)return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.rate=rate;u.pitch=pitch;u.volume=1;const vs=window.speechSynthesis.getVoices();const v=vs.find(v=>/samantha|zira|karen|moira|tessa/i.test(v.name))||vs.find(v=>v.lang.startsWith('en'))||vs[0];if(v)u.voice=v;window.speechSynthesis.speak(u);}
+function speak(text, rate = 1.1, pitch = 1) {
+
+  // browser support check
+  if (!window.speechSynthesis) return;
+
+  // stop previous voice
+  window.speechSynthesis.cancel();
+
+  // remove emojis
+  text = text.replace(
+    /[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu,
+    ''
+  );
+
+  // make speech natural with pauses
+  text = text
+    .replace(/\.\s/g, '. ... ')
+    .replace(/,\s/g, ', ... ')
+    .replace(/\n/g, ' ... ');
+
+  // create speech
+  const u = new SpeechSynthesisUtterance(text);
+
+  // soft male voice settings
+  u.rate = rate;
+  u.pitch = pitch;
+  u.volume = 1;
+
+  // get voices
+  const voices = window.speechSynthesis.getVoices();
+
+  // choose soft male voice
+  const preferredVoice =
+
+    // Chrome
+    voices.find(v => v.name.includes('Google UK English Male')) ||
+
+    // Edge Windows
+    voices.find(v => v.name.includes('Microsoft David')) ||
+    voices.find(v => v.name.includes('Microsoft Ravi')) ||
+
+    // macOS
+    voices.find(v => v.name.includes('Daniel')) ||
+
+    // fallback English male-like voice
+    voices.find(v =>
+      v.lang.startsWith('en') &&
+      !v.name.toLowerCase().includes('female')
+    ) ||
+
+    voices[0];
+
+  // apply voice
+  if (preferredVoice) {
+    u.voice = preferredVoice;
+  }
+
+  // speak
+  window.speechSynthesis.speak(u);
+}
 function mmOpen(){if(mmState.open)return;mmState.open=true;document.getElementById('mm-overlay').classList.add('open');document.getElementById('mm-panel').classList.add('open');if(mmMsgs.children.length===0)startConvo();}
 function mmClose(){mmState.open=false;document.getElementById('mm-overlay').classList.remove('open');document.getElementById('mm-panel').classList.remove('open');}
 async function startConvo(){mmMsgs.innerHTML='';mmState.emotion=null;await typing(1400);await addMsg('bot',"Hey Divya… I'm here 🌿");await typing(1000);await addMsg('bot','How can I support you right now?');await typing(1200);await addWidget(buildEmotions(),100);setTimeout(()=>speak("Hey Divya… I'm here. Tell me how you're feeling."),600);}
 function buildEmotions(){let h=`<div class="emotion-grid">`;Object.entries(EMOTIONS).forEach(([k,e])=>{h+=`<button class="emotion-btn" onclick="pickEmotion('${k}')"><span class="em-emoji">${e.emoji}</span><span><span class="em-label">${e.label}</span><span class="em-sub">${e.sub}</span></span></button>`;});return h+`</div>`;}
-async function pickEmotion(key){const e=EMOTIONS[key];if(!e)return;mmState.emotion=key;document.body.className=`mood-${e.mood}`;await addMsg('user',`${e.emoji} ${e.label}`);await typing(1600);await addMsg('bot',e.reply);await typing(1100);await addWidget(buildActs(e.acts),100);speak(e.reply,0.65,1.1);}
+async function pickEmotion(key){const e=EMOTIONS[key];if(!e)return;mmState.emotion=key;document.body.className=`mood-${e.mood}`;await addMsg('user',`${e.emoji} ${e.label}`);await typing(1600);await addMsg('bot',e.reply);await typing(1100);await addWidget(buildActs(e.acts),100);speak(e.reply);}
 function buildActs(keys){let h=`<div class="activity-grid">`;keys.forEach(k=>{const a=ACTIVITIES[k];if(!a)return;h+=`<button class="activity-chip" onclick="openAct('${k}')"><div class="chip-icon" style="background:${a.color}22;">${a.icon}</div><div class="chip-info"><strong>${a.label}</strong><span>${a.desc}</span></div></button>`;});h+=`<button class="back-link" onclick="goBack()">← choose a different feeling</button>`;return h+`</div>`;}
 async function goBack(){mmState.emotion=null;document.body.className='';await typing(800);await addMsg('bot','Of course — take your time choosing 🌿');await addWidget(buildEmotions(),300);}
 function openAct(key){const a=ACTIVITIES[key];if(!a)return;mmState.activity=key;document.getElementById('full-name').textContent=`${a.icon} ${a.label}`;const iframe=document.getElementById('full-iframe');iframe.src='';iframe.style.display='none';const loader=document.getElementById('full-loader');loader.style.display='flex';const fill=loader.querySelector('.loader-fill');fill.style.animation='none';requestAnimationFrame(()=>{fill.style.animation='';});document.getElementById('mm-fullscreen').classList.add('open');iframe.onload=()=>setTimeout(()=>{loader.style.display='none';iframe.style.display='block';},400);iframe.src=a.url;speak(`Opening ${a.label}. Take your time here.`);}
 async function mmCloseActivity(){document.getElementById('mm-fullscreen').classList.remove('open');document.getElementById('full-iframe').src='';if(!mmState.open)mmOpen();await typing(900);await addMsg('bot','How did that feel for you?');await addWidget(`<div class="feedback-btns"><button class="fb-btn" onclick="feedback('yes')">💚 That helped</button><button class="fb-btn" onclick="feedback('little')">🌀 A little</button><button class="fb-btn" onclick="feedback('no')">💭 Not really</button></div>`,200);}
-async function feedback(r){const map={yes:{u:'💚 That helped',b:"I'm so glad 🌿 That small step matters more than you know.",n:'Would you like to try something else, or just rest here for a while?'},little:{u:'🌀 A little',b:'A little is still something. Even 1% lighter is real.',n:'Want to try one more thing that might help?'},no:{u:'💭 Not really',b:"That's okay. Not everything works every time — you're still trying, and that matters.",n:'Can I suggest something different for how you\'re feeling?'}};const d=map[r];await addMsg('user',d.u);await typing(1300);await addMsg('bot',d.b);await typing(1100);await addMsg('bot',d.n);if(mmState.emotion){const em=EMOTIONS[mmState.emotion];const rest=em.acts.filter(k=>k!==mmState.activity);await typing(900);await addWidget(rest.length>0?buildActs(rest.slice(0,3)):buildEmotions(),200);}speak(d.b,0.65,1.1);}
+async function feedback(r){const map={yes:{u:'💚 That helped',b:"I'm so glad 🌿 That small step matters more than you know.",n:'Would you like to try something else, or just rest here for a while?'},little:{u:'🌀 A little',b:'A little is still something. Even 1% lighter is real.',n:'Want to try one more thing that might help?'},no:{u:'💭 Not really',b:"That's okay. Not everything works every time — you're still trying, and that matters.",n:'Can I suggest something different for how you\'re feeling?'}};const d=map[r];await addMsg('user',d.u);await typing(1300);await addMsg('bot',d.b);await typing(1100);await addMsg('bot',d.n);if(mmState.emotion){const em=EMOTIONS[mmState.emotion];const rest=em.acts.filter(k=>k!==mmState.activity);await typing(900);await addWidget(rest.length>0?buildActs(rest.slice(0,3)):buildEmotions(),200);}speak(d.b);}
 function showToast(icon,title,msg){document.getElementById('t-icon').textContent=icon;document.getElementById('t-title').textContent=title;document.getElementById('t-msg').textContent=msg;const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),6000);}
 function remind(icon,title,msg){if(document.visibilityState==='visible'){showToast(icon,title,msg);speak(msg,0.78,1.0);}else if(mmState.notif&&'Notification' in window)new Notification(`MindMate 🌿 — ${title}`,{body:msg});}
 function startReminders(){const WATER_MS=10*60*1000;const MEALS=[
@@ -1225,9 +1284,9 @@ function startReminders(){const WATER_MS=10*60*1000;const MEALS=[
   {h:13,m:0,icon:'☀️',title:'Lunch reminder',msg:'Divya… Chandru reminding you 😊 Take a break and eat properly.'},
   {h:17,m:0,icon:'🍵',title:'Snack break',msg:'Divya… just checking in 💛 Have something small and relax for a bit.'},
   {h:20,m:0,icon:'🌙',title:'Dinner time',msg:"Divya… Chandru here 🌙 Don't skip dinner. Take care of yourself."}
-];setInterval(()=>remind('💧','Stay hydrated','Divya… small reminder from Chandru 💙 Drink some water, Okay?'),WATER_MS);setInterval(()=>{const now=new Date(),key=`${now.getHours()}-${now.getMinutes()}`;MEALS.forEach(m=>{if(now.getHours()===m.h&&now.getMinutes()===m.m&&!mmState.mealSent.has(key)){mmState.mealSent.add(key);remind(m.icon,m.title,m.msg);}});},60000);}
+];setInterval(()=>remind('💧','Stay hydrated','Hey , Divya… small reminder from Chandru. 💙 Drink some water, Okay?'),WATER_MS);setInterval(()=>{const now=new Date(),key=`${now.getHours()}-${now.getMinutes()}`;MEALS.forEach(m=>{if(now.getHours()===m.h&&now.getMinutes()===m.m&&!mmState.mealSent.has(key)){mmState.mealSent.add(key);remind(m.icon,m.title,m.msg);}});},60000);}
 function requestNotif(){if(!('Notification' in window))return;if(Notification.permission==='granted'){mmState.notif=true;return;}if(Notification.permission!=='denied')Notification.requestPermission().then(p=>{mmState.notif=p==='granted';});}
-(function init(){requestNotif();startReminders();const greet=()=>speak("Hey Divya… I'm here for you. Click MindMate in the corner whenever you need support.",0.65,1.1);if(window.speechSynthesis.getVoices().length>0)setTimeout(greet,1200);else window.speechSynthesis.onvoiceschanged=()=>setTimeout(greet,1200);})();
+(function init(){requestNotif();startReminders();const greet=()=>speak("Hey Divya… I'm here for you. Click MindMate in the corner whenever you need support.");if(window.speechSynthesis.getVoices().length>0)setTimeout(greet,1200);else window.speechSynthesis.onvoiceschanged=()=>setTimeout(greet,1200);})();
 
 /* 🎂 BIRTHDAY MODE ENGINE */
 (function checkBirthdayMode(){
